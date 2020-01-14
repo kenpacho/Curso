@@ -2,8 +2,7 @@ package conectaBD;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.sql.*;
 
 
@@ -65,11 +64,11 @@ class Marco_Aplicacion extends JFrame {
 
         botonConsulta.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(ActionEvent e) {
 
                 ejecutaConsulta();
             }
-        });
+            });
 
         add(botonConsulta, BorderLayout.SOUTH);
 
@@ -127,13 +126,41 @@ class Marco_Aplicacion extends JFrame {
 
         try{
 
+            resultado.setText("");
+
             String seccion = (String)secciones.getSelectedItem();
 
-            enviaConsultaSeccion = miConexion.prepareStatement(consultaSeccion);
+            String pais= (String)paises.getSelectedItem();
 
-            enviaConsultaSeccion.setString(1,seccion);
+            if(!seccion.equals("Todos") && pais.equals("Todos")) {
 
-            rs=enviaConsultaSeccion.executeQuery();
+                enviaConsultaSeccion = miConexion.prepareStatement(consultaSeccion);
+
+                enviaConsultaSeccion.setString(1, seccion);
+
+                rs = enviaConsultaSeccion.executeQuery();
+
+            }else if(seccion.equals("Todos") && !pais.equals("Todos")){
+
+                enviaConsultaPais = miConexion.prepareStatement(consultaPais);
+
+                enviaConsultaPais.setString(1, pais);
+
+                rs = enviaConsultaPais.executeQuery();
+
+
+            }else if(!seccion.equals("Todos") && !pais.equals("Todos")){
+
+                enviaConsultaTodos = miConexion.prepareStatement(consultaTodos);
+
+                enviaConsultaTodos.setString(1, seccion);
+
+                enviaConsultaTodos.setString(2, pais);
+
+                rs = enviaConsultaTodos.executeQuery();
+
+
+            }
 
             while(rs.next()){
 
@@ -161,9 +188,17 @@ class Marco_Aplicacion extends JFrame {
 
     private JComboBox secciones;
 
+    private PreparedStatement enviaConsultaPais;
+
     private PreparedStatement enviaConsultaSeccion;
 
-    private final String consultaSeccion= " SELECT NOMBRE_ARTÍCULO, SECCIÓN, PRECIO, PAÍS_DE_ORIGEN FROM PRODUCTOS WHERE SECCIÓN=?";
+    private PreparedStatement enviaConsultaTodos;
+
+    private final String consultaTodos="SELECT NOMBRE_ARTÍCULO, SECCIÓN, PRECIO, PAISDEORIGEN FROM PRODUCTOS WHERE SECCIÓN=? AND PAISDEORIGEN=?";
+
+    private final String consultaSeccion= "SELECT NOMBRE_ARTÍCULO, SECCIÓN, PRECIO, PAISDEORIGEN FROM PRODUCTOS WHERE SECCIÓN=?";
+
+    private final String consultaPais= "SELECT NOMBRE_ARTÍCULO, SECCIÓN, PRECIO, PAISDEORIGEN FROM PRODUCTOS WHERE PAISDEORIGEN=?";
 
     private JComboBox paises;
 

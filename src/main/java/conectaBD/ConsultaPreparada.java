@@ -16,7 +16,7 @@ public class ConsultaPreparada {
 
                 //2. PREPARAR CONSULTA.
 
-            PreparedStatement miSentencia = miConexion.prepareStatement("SELECT NOMBRE_ARTÍCULO, SECCIÓN, PAÍS_DE_ORIGEN FROM PRODUCTOS WHERE SECCIÓN=? AND PAÍS_DE_ORIGEN=?");
+            PreparedStatement miSentencia = miConexion.prepareStatement("SELECT NOMBRE_ARTÍCULO, SECCIÓN, PAISDEORIGEN FROM PRODUCTOS WHERE SECCIÓN=? AND PAISDEORIGEN=?");
 
                 //3. ESTABLECER PARÁMETROS DE CONSULTA.
 
